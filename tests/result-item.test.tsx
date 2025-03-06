@@ -8,7 +8,6 @@ vi.mock('../src/api/books', () => ({
   getAdditionalInfo: vi.fn()
 }))
 
-
 describe('ResultItem', () => {
   const mocBook = {
     coverUrl: "https://covers.openlibrary.org/b/isbn/9783442236862-L.jpg",
@@ -34,8 +33,6 @@ describe('ResultItem', () => {
 
     vi.mocked(booksApi.getAdditionalInfo).mockResolvedValue(mockApiResponse);
   })
-
-
 
   it('should render the result item component', () => {
     render(<ResultItem book={mocBook} />);
