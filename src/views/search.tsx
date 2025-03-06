@@ -25,9 +25,9 @@ function Results(props: { searchResults: Book[], loading: boolean, error: Error 
   return (
     <section>
       <h2>Results</h2>
+      {props.loading && <p>Loading...</p>}
       {props.searchResults.length > 0 && !props.error && (
         <>
-          {props.loading && <p>Loading...</p>}
           <div className="results" data-testid="results">
             {props.searchResults.map((book) => (
               <ResultItem key={book.key} book={book} />

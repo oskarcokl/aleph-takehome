@@ -74,4 +74,22 @@ describe('Search', () => {
       expect(screen.queryByTestId('results')).not.toBeInTheDocument();
     })
   })
+  it('should display loading state', async () => {
+    const mockSearch = vi.fn() as unknown as DebouncedFunc<(searchQuery: string) => void>;
+    mockSearch.cancel = vi.fn();
+    mockSearch.flush = vi.fn();
+
+    vi.mocked(useBookSearchByTitle).mockReturnValue({
+      searchResults: [],
+      loading: true,
+      error: null,
+      clearSearchResults: vi.fn(),
+      search: mockSearch
+    })
+
+    render(<Search />);
+    await waitFor(() => {
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+    })
+  })
 })
