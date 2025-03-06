@@ -50,7 +50,9 @@ export default function ResultItem(props: { book: Book }) {
   return (
     <div className="result-item" key={props.book.key} onMouseEnter={() => displayAdditionalInfo(props.book)} onMouseLeave={() => hideAdditionalInfo()}>
       <h4>{props.book.title}</h4>
-      <img className="book-thumbnail" src={props.book.coverUrl} alt="Book Cover" />
+      <div className="book-thumbnail">
+        <CoverImage coverUrl={props.book.coverUrl} title={props.book.title} authors={[]} />
+      </div>
       {showAdditionalInfo && additionalInfoId == props.book.key && < AdditionalInfo additionalInfo={additionalInfo} />}
     </div>
   )

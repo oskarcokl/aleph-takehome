@@ -7,3 +7,30 @@
     justify-content: center;
     flex-direction: column;
 }
+
+.book-thumbnail {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 2px solid #ddd;
+    user-select: none;
+}
+
+.additional-info {
+    border: 1px solid black;
+    padding: 10px;
+    position: absolute;
+    top: -50px;
+    left: 300px;
+    z-index: 100;
+    background-color: white;
+}
+
+.additional-info img {
+    width: 300px;
+}
