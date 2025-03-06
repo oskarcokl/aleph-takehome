@@ -31,7 +31,7 @@ describe('ResultItem', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mocked(booksApi.getAdditionalInfo).mockResolvedValue(mockApiResponse);
+    vi.mocked(booksApi.getBookDetails).mockResolvedValue(mockApiResponse);
   })
 
   it('should render the result item component', () => {
@@ -46,6 +46,7 @@ describe('ResultItem', () => {
     expect(screen.queryByText('Physical Format:', { exact: false })).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
+    // TODO: Use userEvent API instead.
     fireEvent.mouseEnter(resultItemElement!);
 
     await waitFor(() => {

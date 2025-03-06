@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Book } from "../types";
-import { getAdditionalInfo } from "../api/books";
+import { getBookDetails } from "../api/books";
 
 type AdditionalInfo = {
   coverUrl: string,
@@ -19,7 +19,7 @@ export default function ResultItem(props: { book: Book }) {
 
   const displayAdditionalInfo = async (book: Book) => {
     setShowAdditionalInfo(true);
-    const data = await getAdditionalInfo('olid', book.key);
+    const data = await getBookDetails('olid', book.key);
 
     if (!data) {
       // TODO: Show some sort of error state.

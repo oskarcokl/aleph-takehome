@@ -1,6 +1,6 @@
 type IdType = 'isbn' | 'lccn' | 'oclc' | 'olid';
 
-export async function getAdditionalInfo(idType: IdType, idValue: string) {
+export async function getBookDetails(idType: IdType, idValue: string) {
     if (idValue === '') {
         throw Error('idValue needs to be a non empty string');
     }
