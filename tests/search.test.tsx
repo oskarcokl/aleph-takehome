@@ -3,54 +3,37 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 import Search from '../src/views/search'
-import * as booksApi from '../src/api/books';
+import { useBookSearchByTitle } from "../src/hooks/books";
+import { DebouncedFunc } from 'lodash';
 
-vi.mock('../src/api/books', () => ({
-  getBooksByTitle: vi.fn()
+vi.mock('../src/hooks/books', () => ({
+  useBookSearchByTitle: vi.fn()
 }))
 
 describe('Search', () => {
-  const mockApiResponse = {
-    "docs": [
-      {
-        "cover_i": 392508,
-        "key": "/works/OL38501W",
-        "title": "Snow Crash",
-        "editions": {
-          "numFound": 38,
-          "start": 0,
-          "numFoundExact": true,
-          "docs": [
-            {
-              "key": "/books/OL14813122M",
-              "title": "Snow Crash",
-              "cover_i": 7004665
-            }
-          ]
-        }
-      },
-      {
-        "key": "/works/OL8495480W",
-        "title": "Snow Crash",
-        "editions": {
-          "numFound": 1,
-          "start": 0,
-          "numFoundExact": true,
-          "docs": [
-            {
-              "key": "/books/OL10905105M",
-              "title": "Snow Crash"
-            }
-          ]
-        }
-      }
-    ]
-  }
+  const mockSearchResults = [
+    {
+      "title": "Snow Crash",
+      "coverUrl": "https://covers.openlibrary.org/b/id/7004665-L.jpg",
+      "key": "OL14813122M"
+    },
+    {
+      "title": "Snow Crash",
+      "coverUrl": "",
+      "key": "OL10905105M"
+    }
+  ]
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mocked(booksApi.getBooksByTitle).mockResolvedValue(mockApiResponse);
+    vi.mocked(useBookSearchByTitle).mockReturnValue({
+      searchResults: [],
+      loading: false,
+      error: null,
+      clearSearchResults: vi.fn(),
+      search: vi.fn() as unknown as DebouncedFunc<(searchQuery: string) => void>
+    })
   })
 
   it('should render results view', () => {
@@ -58,6 +41,14 @@ describe('Search', () => {
     expect(screen.getByText('Search for books'))
   })
   it('should render results for query', async () => {
+    vi.mocked(useBookSearchByTitle).mockReturnValue({
+      searchResults: mockSearchResults,
+      loading: false,
+      error: null,
+      clearSearchResults: vi.fn(),
+      search: vi.fn() as unknown as DebouncedFunc<(searchQuery: string) => void>
+    })
+
     const user = userEvent.setup();
 
     render(<Search />);
