@@ -10,6 +10,7 @@ import { getBooksByTitle } from "../api/books";
 export default function Search() {
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   const debouncedSearch = useCallback(debounce((searchQuery: string) => {
     if (!searchQuery) {
@@ -37,6 +38,7 @@ export default function Search() {
           }).filter(Boolean));
         } catch (e) {
           console.error(e);
+          setError(e as Error);
         } finally {
           setLoading(false);
         }
@@ -57,20 +59,18 @@ export default function Search() {
   return (
     <section>
       <h1>Search for books</h1>
-
       <input type="text" placeholder="Search" onChange={handleChange} />
-      <Results searchResults={searchResults} loading={loading} />
-
+      <Results searchResults={searchResults} loading={loading} error={error} />
     </section>
   );
 }
 
 
-function Results(props: { searchResults: Book[], loading: boolean }) {
+function Results(props: { searchResults: Book[], loading: boolean, error: Error | null }) {
   return (
     <>
       <h2>Results</h2>
-      {props.searchResults.length > 0 && (
+      {props.searchResults.length > 0 && !props.error && (
         <>
           {props.loading && <p>Loading...</p>}
           <div className="results" data-testid="results">
@@ -80,6 +80,7 @@ function Results(props: { searchResults: Book[], loading: boolean }) {
           </div>
         </>
       )}
+      {props.error && <p>Something went wrong while loading the search results</p>}
     </>
   )
 }
