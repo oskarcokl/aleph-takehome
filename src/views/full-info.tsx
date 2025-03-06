@@ -1,31 +1,50 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FullInfoComponent from "../components/full-info";
+import { getBookDetails } from "../api/books";
+
+type BookDetails = {
+  title: string;
+  authors: string[];
+  publishDate: string;
+  physicalFormat: string;
+}
 
 export default function FullInfo() {
   const { isbn } = useParams();
 
   const coverImageUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-  const [title, setTitle] = useState<any>(null);
-  const [authors, setAuthors] = useState<any>(null);
-  const [publishDate, setPublishDate] = useState<any>(null);
-  const [physicalFormat, setPhysicalFormat] = useState<any>(null);
+
+  const [bookDetails, setBookDetails] = useState<BookDetails | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=details&format=json`)
-      .then(response => response.json())
-      .then(data => {
-        setTitle(data[`ISBN:${isbn}`].details.title);
-        setAuthors(data[`ISBN:${isbn}`].details.authors.map((author: { key: string, name: string }) => author.name));
-        setPublishDate(data[`ISBN:${isbn}`].details.publish_date);
-        setPhysicalFormat(data[`ISBN:${isbn}`].details.physical_format);
-      });
+    const fetchBookDetails = async () => {
+      setLoading(true);
+      try {
+        const data = await getBookDetails('isbn', isbn!);
+
+        setBookDetails({
+          title: data.details.title,
+          authors: data.details.authors.map((author: { key: string, name: string }) => author.name),
+          publishDate: data.details.publish_date,
+          physicalFormat: data.details.physical_format
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBookDetails();
   }, [isbn]);
 
   return (
     <section>
       <h1>Full Info</h1>
-      <FullInfoComponent coverImageUrl={coverImageUrl} title={title} authors={authors} publishDate={publishDate} physicalFormat={physicalFormat} />
+      {loading && <p>Loading...</p>}
+      {bookDetails && <FullInfoComponent coverImageUrl={coverImageUrl} title={bookDetails.title} authors={bookDetails.authors} publishDate={bookDetails.publishDate} physicalFormat={bookDetails.physicalFormat} />}
     </section>
   );
 }
