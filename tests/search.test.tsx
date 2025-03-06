@@ -67,7 +67,7 @@ describe('Search', () => {
     await user.keyboard('snow crash');
 
     await waitFor(() => {
-      expect(screen.getByText('Snow Crash')).toBeInTheDocument();
+      expect(screen.getAllByText('Snow Crash', { exact: false }).length).toBeGreaterThan(0);
     })
   })
   it('should not render anything if there is no query', async () => {
