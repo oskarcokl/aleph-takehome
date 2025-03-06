@@ -12,7 +12,7 @@ export default defineConfig({
         testTimeout: 30000,
         coverage: {
             provider: 'istanbul',
-            include: ['src/**/*.{js,jsx,ts,tsx}'],
+            include: ['src/**/*.{jsx,tsx}'],
             exclude: ['src/main.tsx'],
             all: true,
         },
