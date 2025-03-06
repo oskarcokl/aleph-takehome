@@ -70,4 +70,17 @@ describe('Search', () => {
       expect(screen.getByText('Snow Crash')).toBeInTheDocument();
     })
   })
+  it('should not render anything if there is no query', async () => {
+    const user = userEvent.setup();
+
+    render(<Search />);
+    const searchInput = screen.getByPlaceholderText('Search')
+    await user.click(searchInput);
+    await user.keyboard('jkl{backspace}')
+
+    // Maybe this can be a bit more robust.
+    await waitFor(() => {
+      expect(screen.queryByTestId('results')).not.toBeInTheDocument();
+    })
+  })
 })
