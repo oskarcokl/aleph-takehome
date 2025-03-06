@@ -5,7 +5,7 @@ import ResultItem from '../src/components/result-item'
 import * as booksApi from '../src/api/books';
 
 vi.mock('../src/api/books', () => ({
-  getAdditionalInfo: vi.fn()
+  getBookDetails: vi.fn()
 }))
 
 describe('ResultItem', () => {
