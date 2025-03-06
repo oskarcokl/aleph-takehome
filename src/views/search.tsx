@@ -4,6 +4,7 @@ import { debounce } from "lodash";
 import "./search.css";
 import { Book } from "../types";
 import ResultItem from "../components/result-item";
+import { getBooksByTitle } from "../api/books";
 
 
 export default function Search() {
@@ -20,9 +21,7 @@ export default function Search() {
       if (searchQuery) {
         setLoading(true);
         try {
-          const response = await fetch(`https://openlibrary.org/search.json?title=${searchQuery}&fields=key,title,cover_i,editions`)
-          const data = await response.json();
-          console.log(data)
+          const data = await getBooksByTitle(searchQuery);
           setSearchResults(data.docs.map((doc: any): Book | null => {
             // NOTE: Currently not displaying books without a cover. Ask a
             // clarifying question for this
@@ -57,7 +56,7 @@ export default function Search() {
 
   return (
     <section>
-      <h1>Search for book covers</h1>
+      <h1>Search for books</h1>
 
       <input type="text" placeholder="Search" onChange={handleChange} />
       <Results searchResults={searchResults} loading={loading} />
