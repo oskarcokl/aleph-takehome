@@ -1,0 +1,41 @@
+.book-thumbnail {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: fit-content;
+
+}
+
+.result-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+
+.result-item h4 {
+    display: inline;
+}
+
+.additional-info {
+    border: 1px solid black;
+    padding: 10px;
+    position: absolute;
+    top: -50px;
+    left: 300px;
+    z-index: 100;
+    background-color: white;
+}
+
+.additional-info img {
+    width: 300px;
+}
