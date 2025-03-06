@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Book } from "../types";
 import { getBookDetails } from "../api/books";
+import './result-item.css';
 
 type AdditionalInfo = {
   coverUrl: string,
@@ -62,7 +63,7 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
 
   return (
     <div className="additional-info">
-      <img src={additionalInfo.coverUrl} alt="Book Cover" />
+      <CoverImage coverUrl={additionalInfo.coverUrl} title={additionalInfo.title} authors={additionalInfo.authors} />
       <h4>Title: {additionalInfo.title}</h4>
       <p>Authors: {additionalInfo.authors?.join(', ')}</p>
       <p>Publish Date: {additionalInfo.publishDate}</p>
@@ -71,4 +72,16 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
       <p>Weight: {additionalInfo.weight}</p>
     </div>
   );
+}
+
+function CoverImage(props: { coverUrl: string, title: string, authors: string[] }) {
+  if (props.coverUrl === '') {
+    return <div className="default-cover-image">
+      {/* h2 bigger than h1 for some reason? Just change this when adding tailwindcss */}
+      <h2>{props.title}</h2>
+      <h1>{props.authors.join(', ')}</h1>
+    </div>;
+  }
+
+  return <img src={props.coverUrl} alt="Book Cover" />;
 }
