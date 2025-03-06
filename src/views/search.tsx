@@ -73,7 +73,7 @@ function Results(props: { searchResults: Book[], loading: boolean }) {
       {props.searchResults.length > 0 && (
         <>
           {props.loading && <p>Loading...</p>}
-          <div className="results">
+          <div className="results" data-testid="results">
             {props.searchResults.map((book) => (
               <ResultItem key={book.key} book={book} />
             ))}
