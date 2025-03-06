@@ -46,13 +46,13 @@ describe('ResultItem', () => {
   it('should render additional info when hovered', async () => {
     render(<ResultItem book={mocBook} />);
 
-    expect(screen.queryByText('Physical Format:')).not.toBeInTheDocument();
+    expect(screen.queryByText('Physical Format:', { exact: false })).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
     fireEvent.mouseEnter(resultItemElement!);
 
     await waitFor(() => {
-      expect(screen.getByText("Physical Format:")).toBeInTheDocument();
+      expect(screen.getByText("Physical Format:", { exact: false })).toBeInTheDocument();
     })
 
     expect(screen.getByText("Title:", { exact: false })).toBeInTheDocument();
@@ -60,5 +60,20 @@ describe('ResultItem', () => {
     expect(screen.getByText("Publish Date:", { exact: false })).toBeInTheDocument();
     expect(screen.getByText("Number of Pages:", { exact: false })).toBeInTheDocument();
     expect(screen.getByText("Weight:", { exact: false })).toBeInTheDocument();
+  })
+  it('should stop rendering additional info on mouseleave', async () => {
+    render(<ResultItem book={mocBook} />);
+
+    expect(screen.queryByText('Physical Format:')).not.toBeInTheDocument();
+
+    const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
+    fireEvent.mouseEnter(resultItemElement!);
+
+    await waitFor(() => {
+      expect(screen.getByText("Physical Format:", { exact: false })).toBeInTheDocument();
+    })
+
+    fireEvent.mouseLeave(resultItemElement!);
+    expect(screen.queryByText('Physical Format:', { exact: false })).not.toBeInTheDocument();
   })
 })
