@@ -1,60 +1,16 @@
-import { useCallback, useState } from "react";
-import { debounce } from "lodash";
 // TODO: Split up the css file
 import "./search.css";
 import { Book } from "../types";
 import ResultItem from "../components/result-item";
-import { getBooksByTitle } from "../api/books";
-
+import { useBookSearchByTitle } from "../hooks/books";
 
 export default function Search() {
-  const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<Book[]>([]);
-  const [error, setError] = useState<Error | null>(null);
-
-  const debouncedSearch = useCallback(debounce((searchQuery: string) => {
-    if (!searchQuery) {
-      setSearchResults([]);
-      return;
-    }
-
-    const fetchBookCoverUrls = async () => {
-      if (searchQuery) {
-        setLoading(true);
-        try {
-          const data = await getBooksByTitle(searchQuery);
-          setSearchResults(data.docs.map((doc: any): Book | null => {
-            // NOTE: Currently not displaying books without a cover. Ask a
-            // clarifying question for this
-            if (doc.editions.docs.length === 0 || !doc.cover_i) {
-              return null;
-            }
-
-            return {
-              title: doc.title,
-              coverUrl: `https://covers.openlibrary.org/b/id/${doc.editions.docs[0].cover_i}-L.jpg`,
-              key: doc.editions.docs[0].key.replace('/books/', '')
-            }
-          }).filter(Boolean));
-        } catch (e) {
-          console.error(e);
-          setError(e as Error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchBookCoverUrls();
-
-  }, 300),
-    []);
+  const { searchResults, loading, error, search } = useBookSearchByTitle();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchQuery = e.target.value.replace(/\s+/g, '+').toLowerCase();;
-    debouncedSearch(searchQuery);
+    search(searchQuery);
   }
-
 
   return (
     <section>
@@ -64,7 +20,6 @@ export default function Search() {
     </section>
   );
 }
-
 
 function Results(props: { searchResults: Book[], loading: boolean, error: Error | null }) {
   return (

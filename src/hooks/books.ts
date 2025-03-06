@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { getBookDetails } from '../api/books';
+import { useState, useEffect, useCallback } from 'react';
+import { getBookDetails, getBooksByTitle } from '../api/books';
+import { Book } from '../types';
+import { debounce } from 'lodash';
 
 type BookDetails = {
     title: string;
@@ -38,4 +40,60 @@ export function useBookDetails(isbn: string) {
     }, [isbn]);
 
     return { bookDetails, loading, error };
+}
+
+export function useBookSearchByTitle(debounceMs = 300) {
+    const [loading, setLoading] = useState(false);
+    const [searchResults, setSearchResults] = useState<Book[]>([]);
+    const [error, setError] = useState<Error | null>(null);
+
+    const debouncedSearch = useCallback(
+        debounce((searchQuery: string) => {
+            if (!searchQuery) {
+                setSearchResults([]);
+                return;
+            }
+
+            const fetchBookCoverUrls = async () => {
+                if (searchQuery) {
+                    setLoading(true);
+                    try {
+                        const data = await getBooksByTitle(searchQuery);
+                        setSearchResults(
+                            data.docs
+                                .map((doc: any): Book | null => {
+                                    // NOTE: Currently not displaying books without a cover. Ask a
+                                    // clarifying question for this
+                                    if (doc.editions.docs.length === 0 || !doc.cover_i) {
+                                        return null;
+                                    }
+
+                                    return {
+                                        title: doc.title,
+                                        coverUrl: `https://covers.openlibrary.org/b/id/${doc.editions.docs[0].cover_i}-L.jpg`,
+                                        key: doc.editions.docs[0].key.replace('/books/', ''),
+                                    };
+                                })
+                                .filter(Boolean)
+                        );
+                    } catch (e) {
+                        console.error(e);
+                        setError(e as Error);
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+            };
+
+            fetchBookCoverUrls();
+        }, debounceMs),
+        []
+    );
+
+    const clearSearchResults = useCallback(() => {
+        setSearchResults([]);
+        setError(null);
+    }, []);
+
+    return { searchResults, loading, error, clearSearchResults, search: debouncedSearch };
 }
