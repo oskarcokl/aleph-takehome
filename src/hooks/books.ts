@@ -55,33 +55,31 @@ export function useBookSearchByTitle(debounceMs = 300) {
             }
 
             const fetchBookCoverUrls = async () => {
-                if (searchQuery) {
-                    setLoading(true);
-                    try {
-                        const data = await getBooksByTitle(searchQuery);
-                        setSearchResults(
-                            data.docs
-                                .map((doc: any): Book | null => {
-                                    // NOTE: Currently not displaying books without a cover. Ask a
-                                    // clarifying question for this
-                                    if (doc.editions.docs.length === 0 || !doc.cover_i) {
-                                        return null;
-                                    }
+                setLoading(true);
+                try {
+                    const data = await getBooksByTitle(searchQuery);
+                    setSearchResults(
+                        data.docs.map((doc: any): Book | null => {
+                            // NOTE: Currently not displaying books without a cover. Ask a
+                            // clarifying question for this
+                            if (doc.editions.docs.length === 0) {
+                                return null;
+                            }
 
-                                    return {
-                                        title: doc.title,
-                                        coverUrl: `https://covers.openlibrary.org/b/id/${doc.editions.docs[0].cover_i}-L.jpg`,
-                                        key: doc.editions.docs[0].key.replace('/books/', ''),
-                                    };
-                                })
-                                .filter(Boolean)
-                        );
-                    } catch (e) {
-                        console.error(e);
-                        setError(e as Error);
-                    } finally {
-                        setLoading(false);
-                    }
+                            return {
+                                title: doc.title,
+                                coverUrl: doc.editions.docs[0].cover_i
+                                    ? `https://covers.openlibrary.org/b/id/${doc.editions.docs[0].cover_i}-L.jpg`
+                                    : '',
+                                key: doc.editions.docs[0].key.replace('/books/', ''),
+                            };
+                        })
+                    );
+                } catch (e) {
+                    console.error(e);
+                    setError(e as Error);
+                } finally {
+                    setLoading(false);
                 }
             };
 
