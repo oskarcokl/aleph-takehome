@@ -8,10 +8,10 @@ export default function FullInfo(props: {
   return (
     <div>
       <img src={props.coverImageUrl} alt="Cover" />
-      <p>Title: <span>{props.title}</span></p>
-      <p>Authors: <span>{props.authors}</span></p>
-      <p>Publish Date: <span>{props.publishDate}</span></p>
-      <p>Physical Format: <span>{props.physicalFormat}</span></p>
+      <p>Title: {props.title}</p>
+      <p>Authors: {props.authors}</p>
+      <p>Publish Date: {props.publishDate}</p>
+      <p>Physical Format: {props.physicalFormat}</p>
     </div>
   )
 }
