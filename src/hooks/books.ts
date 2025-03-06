@@ -11,6 +11,7 @@ type BookDetails = {
 export function useBookDetails(isbn: string) {
     const [bookDetails, setBookDetails] = useState<BookDetails | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -27,7 +28,7 @@ export function useBookDetails(isbn: string) {
                     physicalFormat: data.details.physical_format,
                 });
             } catch (error) {
-                console.error(error);
+                setError(error as Error);
             } finally {
                 setLoading(false);
             }
@@ -36,5 +37,5 @@ export function useBookDetails(isbn: string) {
         fetchBookDetails();
     }, [isbn]);
 
-    return { bookDetails, loading };
+    return { bookDetails, loading, error };
 }
