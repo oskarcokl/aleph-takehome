@@ -12,3 +12,12 @@ export async function getAdditionalInfo(idType: IdType, idValue: string) {
 
     return data;
 }
+
+export async function getBooksByTitle(title: string) {
+    const response = await fetch(
+        `https://openlibrary.org/search.json?title=${title}&fields=key,title,cover_i,editions`
+    );
+    const data = await response.json();
+
+    return data;
+}
