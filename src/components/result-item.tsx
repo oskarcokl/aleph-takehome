@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Book } from "../types";
+import { getAdditionalInfo } from "../api/books";
 
 type AdditionalInfo = {
   coverUrl: string,
@@ -16,17 +17,15 @@ export default function ResultItem(props: { book: Book }) {
   const [additionalInfoId, setAdditionalInfoId] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfo | null>(null);
 
-
-
-
   const displayAdditionalInfo = async (book: Book) => {
     setShowAdditionalInfo(true);
-    const response = await fetch(`https://openlibrary.org/api/books?bibkeys=olid:${book.key}&jscmd=details&format=json`)
-    const data = (await response.json())[`olid:${book.key}`];
+    const data = await getAdditionalInfo('olid', book.key);
 
-    console.log('Additional Info', data)
-
-
+    if (!data) {
+      // TODO: Show some sort of error state.
+      setShowAdditionalInfo(false)
+      return
+    }
 
     // assuming all data is available
     setAdditionalInfo({
