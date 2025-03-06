@@ -64,7 +64,7 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
   }
 
   return (
-    <div className="additional-info">
+    <div className="additional-info" data-testid="additional-info">
       <CoverImage coverUrl={additionalInfo.coverUrl} title={additionalInfo.title} authors={additionalInfo.authors} />
       <h4>Title: {additionalInfo.title}</h4>
       <p>Authors: {additionalInfo.authors?.join(', ')}</p>

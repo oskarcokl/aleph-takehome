@@ -43,35 +43,35 @@ describe('ResultItem', () => {
   it('should render additional info when hovered', async () => {
     render(<ResultItem book={mocBook} />);
 
-    expect(screen.queryByText('Physical Format:', { exact: false })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
     // TODO: Use userEvent API instead.
     fireEvent.mouseEnter(resultItemElement!);
 
     await waitFor(() => {
-      expect(screen.getByText("Physical Format:", { exact: false })).toBeInTheDocument();
+      expect(screen.getByTestId('additional-info')).toBeInTheDocument();
     })
 
-    expect(screen.getByText("Title:", { exact: false })).toBeInTheDocument();
-    expect(screen.getByText("Authors:", { exact: false })).toBeInTheDocument();
-    expect(screen.getByText("Publish Date:", { exact: false })).toBeInTheDocument();
-    expect(screen.getByText("Number of Pages:", { exact: false })).toBeInTheDocument();
-    expect(screen.getByText("Weight:", { exact: false })).toBeInTheDocument();
+    expect(screen.getByText("Title: Snow Crash.")).toBeInTheDocument();
+    expect(screen.getByText("Authors: Neal Stephenson")).toBeInTheDocument();
+    expect(screen.getByText("Publish Date: 1993")).toBeInTheDocument();
+    expect(screen.getByText("Number of Pages: 470")).toBeInTheDocument();
+    expect(screen.getByText("Weight:")).toBeInTheDocument();
   })
   it('should stop rendering additional info on mouseleave', async () => {
     render(<ResultItem book={mocBook} />);
 
-    expect(screen.queryByText('Physical Format:')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
     fireEvent.mouseEnter(resultItemElement!);
 
     await waitFor(() => {
-      expect(screen.getByText("Physical Format:", { exact: false })).toBeInTheDocument();
+      expect(screen.getByTestId('additional-info')).toBeInTheDocument();
     })
 
     fireEvent.mouseLeave(resultItemElement!);
-    expect(screen.queryByText('Physical Format:', { exact: false })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
   })
 })
