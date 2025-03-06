@@ -23,7 +23,7 @@ export default function Search() {
 
 function Results(props: { searchResults: Book[], loading: boolean, error: Error | null }) {
   return (
-    <>
+    <section>
       <h2>Results</h2>
       {props.searchResults.length > 0 && !props.error && (
         <>
@@ -36,6 +36,6 @@ function Results(props: { searchResults: Book[], loading: boolean, error: Error 
         </>
       )}
       {props.error && <p>Something went wrong while loading the search results</p>}
-    </>
+    </section>
   )
 }
