@@ -57,4 +57,17 @@ describe('Search', () => {
     render(<Search />);
     expect(screen.getByText('Search for books'))
   })
+  it('should render results for query', async () => {
+    const user = userEvent.setup();
+
+    render(<Search />);
+    const searchInput = await screen.findByPlaceholderText('Search')
+
+    await user.click(searchInput);
+    await user.keyboard('snow crash');
+
+    await waitFor(() => {
+      expect(screen.getByText('Snow Crash')).toBeInTheDocument();
+    })
+  })
 })
