@@ -4,14 +4,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
 import FullInfo from "./views/full-info";
 import Search from "./views/search";
+import Layout from "./layout";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/full-info/:isbn" element={<FullInfo />} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/" element={<Layout><App /></Layout>} />
+        <Route path="/full-info/:isbn" element={<Layout><FullInfo /></Layout>} />
+        <Route path="/search" element={<Layout><Search /></Layout>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
