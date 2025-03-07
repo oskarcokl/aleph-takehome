@@ -1,5 +1,6 @@
 import { describe, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 import ResultItem from '../src/components/result-item'
 import * as booksApi from '../src/api/books';
@@ -41,13 +42,14 @@ describe('ResultItem', () => {
     expect(coverImage).toHaveAttribute('src', 'https://covers.openlibrary.org/b/isbn/9783442236862-L.jpg');
   })
   it('should render additional info when hovered', async () => {
+    const user = userEvent.setup();
+
     render(<ResultItem book={mocBook} />);
 
     expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByTestId('result-item');
-    // TODO: Use userEvent API instead.
-    fireEvent.mouseEnter(resultItemElement!);
+    await user.hover(resultItemElement);
 
     await waitFor(() => {
       expect(screen.getByTestId('additional-info')).toBeInTheDocument();
@@ -60,18 +62,20 @@ describe('ResultItem', () => {
     expect(screen.getByText("Weight:")).toBeInTheDocument();
   })
   it('should stop rendering additional info on mouseleave', async () => {
+    const user = userEvent.setup();
+
     render(<ResultItem book={mocBook} />);
 
     expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
     const resultItemElement = screen.getByTestId('result-item');
-    fireEvent.mouseEnter(resultItemElement!);
+    await user.hover(resultItemElement);
 
     await waitFor(() => {
       expect(screen.getByTestId('additional-info')).toBeInTheDocument();
     })
 
-    fireEvent.mouseLeave(resultItemElement!);
+    await user.unhover(resultItemElement);
     expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
   })
 })
