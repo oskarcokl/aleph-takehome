@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Book } from "../types";
 import { getBookDetails } from "../api/books";
-import './result-item.css';
 
 type AdditionalInfo = {
   coverUrl: string,
@@ -48,10 +47,12 @@ export default function ResultItem(props: { book: Book }) {
   }
 
   return (
-    <div className="result-item" key={props.book.key} onMouseEnter={() => displayAdditionalInfo(props.book)} onMouseLeave={() => hideAdditionalInfo()}>
-      <h4>{props.book.title}</h4>
-      <div className="book-thumbnail">
-        <CoverImage coverUrl={props.book.coverUrl} title={props.book.title} authors={[]} />
+    <div className="relative" key={props.book.key} onMouseEnter={() => displayAdditionalInfo(props.book)} onMouseLeave={() => hideAdditionalInfo()}>
+      <div className="flex items-start gap-10 bg-gray-50 p-4 rounded-md">
+        <div className="w-[100px] h-[100px] bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+          <ThumbnailImage coverUrl={props.book.coverUrl} title={props.book.title} authors={[]} />
+        </div>
+        <h4 className="text-lg font-bold">{props.book.title}</h4>
       </div>
       {showAdditionalInfo && additionalInfoId == props.book.key && < AdditionalInfo additionalInfo={additionalInfo} />}
     </div>
@@ -64,7 +65,7 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
   }
 
   return (
-    <div className="additional-info" data-testid="additional-info">
+    <div className="border-2 border-gray-300 rounded-md p-4 w-fit absolute top-[-50px] left-[300px] z-10 bg-white" data-testid="additional-info">
       <CoverImage coverUrl={additionalInfo.coverUrl} title={additionalInfo.title} authors={additionalInfo.authors} />
       <h4>Title: {additionalInfo.title}</h4>
       <p>Authors: {additionalInfo.authors?.join(', ')}</p>
@@ -78,12 +79,21 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
 
 function CoverImage(props: { coverUrl: string, title: string, authors: string[] }) {
   if (props.coverUrl === '') {
-    return <div className="default-cover-image">
-      {/* h2 bigger than h1 for some reason? Just change this when adding tailwindcss */}
-      <h2>{props.title}</h2>
-      <h1>{props.authors.join(', ')}</h1>
+    return <div className="w-[300px] h-[500px] bg-gray-200 flex items-center justify-center flex-col">
+      <h1 className="text-2xl font-bold">{props.title}</h1>
+      <h2 className="text-sm">{props.authors.join(', ')}</h2>
     </div>;
   }
 
-  return <img src={props.coverUrl} alt="Book Cover" />;
+  return <img className="w-[300px]" src={props.coverUrl} alt="Book Cover" />;
+}
+
+function ThumbnailImage(props: { coverUrl: string, title: string }) {
+  if (props.coverUrl === '') {
+    return <div className="w-full h-full bg-gray-200 flex items-center justify-center flex-col">
+      <h1 className="font-bold">{props.title}</h1>
+    </div>;
+  }
+
+  return <img className="w-full" src={props.coverUrl} alt="Book Cover" />;
 }
