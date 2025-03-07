@@ -67,7 +67,7 @@ function AdditionalInfo({ additionalInfo }: { additionalInfo: AdditionalInfo | n
   return (
     <div className="border-2 border-gray-300 rounded-md p-4 w-fit absolute top-[-50px] left-[300px] z-10 bg-white" data-testid="additional-info">
       <CoverImage coverUrl={additionalInfo.coverUrl} title={additionalInfo.title} authors={additionalInfo.authors} />
-      <h4>Title: {additionalInfo.title}</h4>
+      <h4 className="font-bold text-md">Title: {additionalInfo.title}</h4>
       <p>Authors: {additionalInfo.authors?.join(', ')}</p>
       <p>Publish Date: {additionalInfo.publishDate}</p>
       <p>Physical Format: {additionalInfo.physicalFormat}</p>
