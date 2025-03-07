@@ -47,10 +47,10 @@ export default function ResultItem(props: { book: Book }) {
   }
 
   return (
-    <div className="relative" key={props.book.key} onMouseEnter={() => displayAdditionalInfo(props.book)} onMouseLeave={() => hideAdditionalInfo()}>
+    <div className="relative" data-testid="result-item" key={props.book.key} onMouseEnter={() => displayAdditionalInfo(props.book)} onMouseLeave={() => hideAdditionalInfo()}>
       <div className="flex items-start gap-10 bg-gray-50 p-4 rounded-md">
         <div className="w-[100px] h-[100px] bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
-          <ThumbnailImage coverUrl={props.book.coverUrl} title={props.book.title} authors={[]} />
+          <ThumbnailImage coverUrl={props.book.coverUrl} title={props.book.title} />
         </div>
         <h4 className="text-lg font-bold">{props.book.title}</h4>
       </div>

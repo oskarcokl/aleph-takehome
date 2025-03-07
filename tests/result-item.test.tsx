@@ -45,7 +45,7 @@ describe('ResultItem', () => {
 
     expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
-    const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
+    const resultItemElement = screen.getByTestId('result-item');
     // TODO: Use userEvent API instead.
     fireEvent.mouseEnter(resultItemElement!);
 
@@ -64,7 +64,7 @@ describe('ResultItem', () => {
 
     expect(screen.queryByTestId('additional-info')).not.toBeInTheDocument();
 
-    const resultItemElement = screen.getByText(mocBook.title).closest('.result-item');
+    const resultItemElement = screen.getByTestId('result-item');
     fireEvent.mouseEnter(resultItemElement!);
 
     await waitFor(() => {
