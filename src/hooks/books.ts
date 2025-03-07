@@ -43,6 +43,7 @@ export function useBookDetails(isbn: string) {
 }
 
 export function useBookSearchByTitle(debounceMs = 300) {
+    // TODO: Somehow cancle previous request
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState<Book[]>([]);
     const [error, setError] = useState<Error | null>(null);
