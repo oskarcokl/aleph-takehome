@@ -1,5 +1,3 @@
-// TODO: Split up the css file
-import "./search.css";
 import { Book } from "../types";
 import ResultItem from "../components/result-item";
 import { useBookSearchByTitle } from "../hooks/books";
@@ -13,9 +11,10 @@ export default function Search() {
   }
 
   return (
-    <section>
-      <h1>Search for books</h1>
-      <input type="text" placeholder="Search" onChange={handleChange} />
+    <section className="mt-10">
+      <h1 className="text-3xl font-bold">Search for books</h1>
+      <a href="/" className="text-blue-500 block">[Back]</a>
+      <input className="border-2 border-gray-300 rounded-md px-2 mt-4" type="text" placeholder="Search" onChange={handleChange} />
       <Results searchResults={searchResults} loading={loading} error={error} />
     </section>
   );
@@ -23,8 +22,8 @@ export default function Search() {
 
 function Results(props: { searchResults: Book[], loading: boolean, error: Error | null }) {
   return (
-    <section>
-      <h2>Results</h2>
+    <section className="mt-5">
+      <h2 className="text-2xl font-bold">Results</h2>
       {props.loading && <p>Loading...</p>}
       {props.searchResults.length > 0 && !props.error && (
         <>
